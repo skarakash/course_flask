@@ -33,6 +33,10 @@
                     <label for="birth_date">Birth Date:</label>
                     <input type="date" class="form-control" id="birth_date" required>
                 </div>
+                <div class="form-group">
+                    <label for="breed">Breed:</label>
+                    <input type="text" class="form-control" id="breed" required>
+                </div>
                 <button type="submit" class="btn btn-primary">Add Animal</button>
             </form>
         </div>
@@ -153,7 +157,8 @@
         const newAnimal = {
             animal_type: $('#animal_type').val(),
             name: $('#name').val(),
-            birth_date: $('#birth_date').val()
+            birth_date: $('#birth_date').val(),
+            breed: $('#breed').val()
         };
         $.ajax({
             url: '/animal',
