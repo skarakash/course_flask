@@ -10,3 +10,4 @@ class Animal(db.Model):
     name = db.Column(db.String, nullable=False)
     birth_date = db.Column(db.Date, nullable=False)
     breed = db.Column(db.String, nullable=False)
+    image_url = db.Column(db.String, nullable=False)

@@ -35,7 +35,14 @@
                 </div>
                 <div class="form-group">
                     <label for="breed">Breed:</label>
-                    <input type="text" class="form-control" id="breed" required>
+                    <input type="text" class="form-control" id="breed"
+                           placeholder="Animal Breed" required
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="image_url">Image:</label>
+                    <input type="text" class="form-control"
+                           placeholder="Animal Pic" id="image_url">
                 </div>
                 <button type="submit" class="btn btn-primary">Add Animal</button>
             </form>
@@ -48,8 +55,11 @@
         <thead>
             <tr>
                 <th>Animal Type</th>
+                <th>Breed</th>
                 <th>Name</th>
                 <th>Birth Date</th>
+                <th>Age</th>
+                <th>Image</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -84,6 +94,17 @@
                 <label for="editAnimalBirthDate">Birth Date:</label>
                 <input type="date" class="form-control" id="editAnimalBirthDate" required>
             </div>
+             <div class="form-group">
+                    <label for="editAnimalBreed">Breed:</label>
+                    <input type="text" class="form-control" id="editAnimalBreed"
+                           placeholder="Animal Breed" required
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="editAnimalImage_url">Image:</label>
+                    <input type="text" class="form-control"
+                           placeholder="Animal Pic" id="editAnimalImage_url">
+                </div>
         </form>
       </div>
       <div class="modal-footer">
@@ -99,11 +120,16 @@
     function updateAnimal(id) {
         // Fetch the current details of the animal to pre-populate the form.
         // This assumes you have a backend route to get details of a single animal.
+
         $.getJSON(`/animal/${id}`, function(data) {
+            console.log(data)
             $('#editAnimalId').val(data.animal.id);
             $('#editAnimalType').val(data.animal.animal_type);
             $('#editAnimalName').val(data.animal.name);
             $('#editAnimalBirthDate').val(data.animal.birth_date);
+            $('#editAnimalBreed').val(data.animal.breed);
+            $('#editAnimalImage_url').val(data.animal.image_url);
+
             $('#editAnimalModal').modal('show');
         });
     }
@@ -112,7 +138,9 @@
         const updatedAnimal = {
             animal_type: $('#editAnimalType').val(),
             name: $('#editAnimalName').val(),
-            birth_date: $('#editAnimalBirthDate').val()
+            birth_date: $('#editAnimalBirthDate').val(),
+            breed: $('#editAnimalBreed').val(),
+            image_url: $('#editAnimalImage_url').val(),
         };
 
         const animalId = $('#editAnimalId').val();
@@ -125,8 +153,9 @@
             success: function() {
                 $('#editAnimalModal').modal('hide');
                 fetchAnimals();
-            }
+           }
         });
+
     }
 
 
@@ -135,12 +164,20 @@
         $.getJSON('/animals', function(data) {
             $('#animalsList').empty();
             data.animals.forEach(animal => {
-                console.log(animal)
+                const {animal_type, breed, name, birth_date, image_url, age} = animal
                 $('#animalsList').append(`
                     <tr>
-                        <td>${animal.animal_type}</td>
-                        <td>${animal.name}</td>
-                        <td>${animal.birth_date}</td>
+                        <td>${animal_type}</td>
+                        <td>${breed}</td>
+                        <td>${name}</td>
+                        <td>${birth_date}</td>
+                        <td>${age}</td>
+                        <td>
+                            <img
+                                src="${image_url}"
+                                alt="${name}"
+                                style="width: 50px; height: 50px;"
+                            >
                         <td>
                             <button class="btn btn-warning btn-sm" onclick="updateAnimal(${animal.id})">Update</button>
                             <button class="btn btn-danger btn-sm" onclick="deleteAnimal(${animal.id})">Delete</button>
@@ -158,7 +195,8 @@
             animal_type: $('#animal_type').val(),
             name: $('#name').val(),
             birth_date: $('#birth_date').val(),
-            breed: $('#breed').val()
+            breed: $('#breed').val(),
+            image_url: $('#image_url').val()
         };
         $.ajax({
             url: '/animal',
